@@ -1,36 +1,23 @@
-# CogVideoX-2B RunPod Serverless - Simple Base
-FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04
-
-# Install Python and dependencies
-RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip \
-    ffmpeg \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+FROM runpod/pytorch:2.1.0-py3.10-cuda11.8.0-devel-ubuntu22.04
 
 WORKDIR /app
 
-# Install PyTorch with CUDA and other packages
-RUN pip3 install --no-cache-dir \
-    torch==2.1.0 --index-url https://download.pytorch.org/whl/cu118
-
-RUN pip3 install --no-cache-dir \
-    diffusers \
+# Install dependencies
+RUN pip install --no-cache-dir \
+    runpod \
+    diffusers>=0.30.0 \
     transformers \
     accelerate \
     sentencepiece \
+    imageio[ffmpeg] \
     imageio \
-    imageio-ffmpeg \
-    runpod
+    opencv-python-headless
 
-# Copy handler code
+# Copy handler
 COPY handler.py /app/handler.py
 
-# Set environment variables
-ENV PYTHONUNBUFFERED=1
+# Set environment
 ENV HF_HOME=/runpod-volume
-ENV TRANSFORMERS_CACHE=/runpod-volume
 
-# RunPod handler entrypoint
-CMD ["python3", "-u", "handler.py"]
+# Run handler
+CMD ["python", "-u", "/app/handler.py"]

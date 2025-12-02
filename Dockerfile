@@ -1,9 +1,20 @@
-# CogVideoX-2B RunPod Serverless Deployment
-FROM runpod/pytorch:2.1.0-py3.10-cuda11.8.0-devel-ubuntu22.04
+# CogVideoX-2B RunPod Serverless - Simple Base
+FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04
+
+# Install Python and dependencies
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    ffmpeg \
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Install Python dependencies
+# Install PyTorch with CUDA and other packages
+RUN pip3 install --no-cache-dir \
+    torch==2.1.0 --index-url https://download.pytorch.org/whl/cu118
+
 RUN pip3 install --no-cache-dir \
     diffusers \
     transformers \

@@ -10,6 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - name: Free up disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/share/boost
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          sudo docker system prune -af
+          df -h
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -28,5 +37,4 @@ jobs:
           context: .
           push: true
           tags: chaih/cogvideox-intro:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          no-cache: true

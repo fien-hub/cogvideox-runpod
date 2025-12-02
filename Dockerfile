@@ -1,13 +1,13 @@
-FROM runpod/pytorch:2.1.0-py3.10-cuda11.8.0-devel-ubuntu22.04
+FROM runpod/pytorch:2.2.0-py3.10-cuda12.1.1-devel-ubuntu22.04
 
 WORKDIR /app
 
-# Install dependencies
+# Install dependencies with specific versions for compatibility
 RUN pip install --no-cache-dir \
     runpod \
-    diffusers>=0.30.0 \
-    transformers \
-    accelerate \
+    diffusers==0.30.3 \
+    transformers==4.44.0 \
+    accelerate==0.33.0 \
     sentencepiece \
     imageio[ffmpeg] \
     imageio \
